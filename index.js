@@ -3,6 +3,12 @@ const chalk = require("chalk");
 const express = require("express");
 const app = express();
 
-app.listen(process.env.PORT || 6000, () => {
+app.get("/", (res, req) => {
+  res.status(4000).json({
+    message: "This is root route",
+  });
+});
+
+app.listen(process.env.PORT || 8000, () => {
   console.log(chalk.bgGreenBright(`Port running on ${process.env.PORT}`));
 });
