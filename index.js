@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 
 app.get("/", (res, req) => {
-  res.status(4000).json({
+  res.status(200).json({
     message: "This is root route",
   });
 });
