@@ -3,7 +3,7 @@ const chalk = require("chalk");
 const express = require("express");
 const app = express();
 
-app.get("/", (res, req) => {
+app.get("/", (req, res) => {
   res.status(200).json({
     message: "This is root route",
   });
