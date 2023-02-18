@@ -1,7 +1,7 @@
 const express = require("express");
 const _ = express.Router();
 
-_.get("/taufik", (req, res) => {
+_.get("/registration", (req, res) => {
   res.json({
     message: "this is auth api",
   });
