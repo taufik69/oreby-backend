@@ -4,3 +4,4 @@ const authRoutes = require("./auth");
 _.use("/auth", authRoutes);
 
 module.exports = _;
+// start main route
