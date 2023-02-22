@@ -1,8 +1,9 @@
 const express = require("express");
 const _ = express.Router();
 const UseSchema = require("../../models/UserModel");
+const { getToken } = require("../../Jwt/jwt");
 
-_.post("/registration", (req, res) => {
+_.post("/registration", async (req, res) => {
   const { email, phone, fristName, lastName, password } = req.body;
 
   // cheking all filed are full or not full
@@ -41,7 +42,8 @@ _.post("/registration", (req, res) => {
     password,
   });
   AfterData.save();
-  res.status(200).json(AfterData);
+  const token = getToken({ id: AfterData._id }, "1h");
+  res.status(200).json({ token });
 });
 
 module.exports = _;
