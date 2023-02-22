@@ -1,7 +1,8 @@
 const express = require("express");
 const _ = express.Router();
+const UseSchema = require("../../models/UserModel");
 
-_.get("/registration", (req, res) => {
+_.post("/registration", (req, res) => {
   const { email, phone, fristName, lastName, password } = req.body;
 
   // cheking all filed are full or not full
@@ -31,13 +32,16 @@ _.get("/registration", (req, res) => {
       message: "password missing",
     });
   }
-  res.status(200).json({
+
+  const AfterData = new UseSchema({
     email,
     phone,
     fristName,
     lastName,
     password,
   });
+  AfterData.save();
+  res.status(200).json(AfterData);
 });
 
 module.exports = _;
