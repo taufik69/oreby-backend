@@ -5,6 +5,8 @@ const app = express();
 const cors = require("cors");
 const routes = require("./Routes");
 const { DatabaseConnect } = require("./configuration/DbConnet");
+// const { Nodemailer } = require("./utils/nodeMailer");
+
 /*========================================================= 
     All middleware funciton written below
 ========================================================= */
@@ -12,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 DatabaseConnect();
+// Nodemailer();
 app.use(routes);
 
 app.listen(process.env.PORT || 8000, () => {

@@ -2,6 +2,7 @@ const express = require("express");
 const _ = express.Router();
 const UseSchema = require("../../models/UserModel");
 const { getToken } = require("../../Jwt/jwt");
+const { Nodemailer } = require("../../utils/nodeMailer");
 
 _.post("/registration", async (req, res) => {
   const { email, phone, fristName, lastName, password } = req.body;
@@ -43,6 +44,8 @@ _.post("/registration", async (req, res) => {
   });
   AfterData.save();
   const token = getToken({ id: AfterData._id }, "1h");
+  const some = await Nodemailer(AfterData.email);
+  console.log("from nodemailer :", some);
   res.status(200).json({ token });
 });
 
