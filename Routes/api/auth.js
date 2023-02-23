@@ -44,7 +44,7 @@ _.post("/registration", async (req, res) => {
   });
   AfterData.save();
   const token = getToken({ id: AfterData._id }, "1h");
-  const some = await Nodemailer(AfterData.email);
+  let some = await Nodemailer(AfterData.email);
   console.log("from nodemailer :", some);
   res.status(200).json({ token });
 });
