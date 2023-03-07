@@ -1,5 +1,6 @@
 const express = require("express");
 const _ = express.Router();
+const jwt = require("jsonwebtoken");
 const UseSchema = require("../../models/UserModel");
 const { getToken } = require("../../Jwt/jwt");
 const { Nodemailer } = require("../../utils/nodeMailer");
@@ -44,9 +45,21 @@ _.post("/registration", async (req, res) => {
   });
   AfterData.save();
   const token = getToken({ id: AfterData._id }, "1h");
-  let some = await Nodemailer(AfterData.email);
-  console.log("from nodemailer :", some);
+  await Nodemailer(AfterData.email);
+
   res.status(200).json({ token });
+});
+
+_.post("/emailverification", (req, res) => {
+  jwt.verify(
+    req.headers.authorization,
+    process.env.SECRECT_KEY,
+    (err, decoded) => {
+      res.status(200).json({
+        message: decoded,
+      });
+    }
+  );
 });
 
 module.exports = _;
