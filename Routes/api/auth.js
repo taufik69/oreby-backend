@@ -13,27 +13,34 @@ _.post("/registration", async (req, res) => {
 
   if (!email) {
     return res.status(401).json({
-      message: "Enter Email",
+      error: "Enter Email",
     });
   }
   if (!phone) {
     return res.status(401).json({
-      message: "phone number needed",
+      error: "phone number needed",
     });
   }
   if (!fristName) {
     return res.status(401).json({
-      message: "Fristname missing",
+      error: "Fristname missing",
     });
   }
   if (!lastName) {
     return res.status(401).json({
-      message: "lastName missing",
+      error: "lastName missing",
     });
   }
   if (!password) {
     return res.status(401).json({
-      message: "password missing",
+      error: "password missing",
+    });
+  }
+
+  const duplicateMail = await UseSchema.find({ email: email });
+  if (duplicateMail.length > 0) {
+    return res.status(404).json({
+      error: "This  Email Already Exist",
     });
   }
 
@@ -45,10 +52,12 @@ _.post("/registration", async (req, res) => {
     password,
   });
   AfterData.save();
-  const token = getToken({ id: AfterData._id }, "8h");
+  const token = getToken({ email: AfterData.email }, "1h");
   await Nodemailer(AfterData.email);
 
-  res.status(200).json({ token });
+  res.status(200).json({
+    token: token,
+  });
 });
 
 _.post("/emailverification", (req, res) => {
@@ -56,7 +65,14 @@ _.post("/emailverification", (req, res) => {
     req.headers.authorization,
     process.env.SECRECT_KEY,
     async function (err, decoded) {
-      const filter = { _id: decoded.id };
+      const checkverified = await UseSchema.find({ email: decoded.email });
+      if (checkverified[0].verfied) {
+        return res.status(404).json({
+          error: "This email already verified",
+        });
+      }
+
+      const filter = { email: decoded.email };
       const update = { verfied: true };
       let updated = await UseSchema.findOneAndUpdate(
         filter,
@@ -65,13 +81,23 @@ _.post("/emailverification", (req, res) => {
         {
           new: true,
         }
-        // function (err, doc) {
-        //   res.json(doc);
-        // }
       );
-      res.json(updated);
+      res.json({
+        message: updated,
+      });
     }
   );
+});
+
+_.post("/login", async (req, res) => {
+  let { email, password } = req.body;
+  const ExistingEmail = await UseSchema.find({ email });
+  if (ExistingEmail.length == 0) {
+    return res.json({
+      error: `This ==> ${email} <== does't not Match`,
+    });
+  }
+  res.json(ExistingEmail);
 });
 
 module.exports = _;
