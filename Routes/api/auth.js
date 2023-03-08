@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const _ = express.Router();
 const jwt = require("jsonwebtoken");
@@ -44,7 +45,7 @@ _.post("/registration", async (req, res) => {
     password,
   });
   AfterData.save();
-  const token = getToken({ id: AfterData._id }, "1h");
+  const token = getToken({ id: AfterData._id }, "8h");
   await Nodemailer(AfterData.email);
 
   res.status(200).json({ token });
@@ -54,10 +55,21 @@ _.post("/emailverification", (req, res) => {
   jwt.verify(
     req.headers.authorization,
     process.env.SECRECT_KEY,
-    (err, decoded) => {
-      res.status(200).json({
-        message: decoded,
-      });
+    async function (err, decoded) {
+      const filter = { _id: decoded.id };
+      const update = { verfied: true };
+      let updated = await UseSchema.findOneAndUpdate(
+        filter,
+        update,
+
+        {
+          new: true,
+        }
+        // function (err, doc) {
+        //   res.json(doc);
+        // }
+      );
+      res.json(updated);
     }
   );
 });
