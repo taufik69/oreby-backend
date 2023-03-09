@@ -60,6 +60,7 @@ _.post("/registration", async (req, res) => {
   });
 });
 
+// when click email template verify btn then work this route .
 _.post("/emailverification", (req, res) => {
   jwt.verify(
     req.headers.authorization,
@@ -98,6 +99,7 @@ _.post("/login", async (req, res) => {
     });
   }
   res.json(ExistingEmail);
+  console.log("password is:", password);
 });
 
 module.exports = _;
