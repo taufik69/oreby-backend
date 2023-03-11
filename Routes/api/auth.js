@@ -59,7 +59,7 @@ _.post("/registration", async (req, res) => {
   });
   AfterData.save();
   const token = getToken({ email: AfterData.email }, "1h");
-  await Nodemailer(AfterData.email);
+  // await Nodemailer(AfterData.email);
 
   res.status(200).json({
     token: token,
@@ -99,12 +99,32 @@ _.post("/emailverification", (req, res) => {
 _.post("/login", async (req, res) => {
   let { email, password } = req.body;
   const ExistingEmail = await UseSchema.findOne({ email });
+
+  // check this given email are exist in  database or not
   if (ExistingEmail.length == 0) {
     return res.json({
       error: `This ==> ${email} <== does't not Match`,
     });
   }
-  res.json(ExistingEmail);
+
+  // Now check is email verified or not!
+  if (!ExistingEmail.verfied) {
+    return res.status(200).json({
+      message: "Please go to your mail and verify email",
+    });
+  }
+
+  //  check the given password and brcpt password
+  bcrypt.compare(password, ExistingEmail.password, function (err, result) {
+    if (result) {
+      return res.status(200).json({
+        message: "Login sucessful",
+      });
+    }
+    return res.status(404).json({
+      error: "password does not match Try agin !",
+    });
+  });
 });
 
 module.exports = _;
