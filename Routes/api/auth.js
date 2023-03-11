@@ -1,10 +1,12 @@
 require("dotenv").config();
 const express = require("express");
+const bcrypt = require("bcrypt");
 const _ = express.Router();
 const jwt = require("jsonwebtoken");
 const UseSchema = require("../../models/UserModel");
 const { getToken } = require("../../Jwt/jwt");
 const { Nodemailer } = require("../../utils/nodeMailer");
+const saltRounds = 10;
 
 _.post("/registration", async (req, res) => {
   const { email, phone, fristName, lastName, password } = req.body;
@@ -44,12 +46,16 @@ _.post("/registration", async (req, res) => {
     });
   }
 
+  // convert to normal password to hash password via  bycrpt
+
+  const hashpassword = await bcrypt.hash(password, saltRounds);
+
   const AfterData = new UseSchema({
     email,
     phone,
     fristName,
     lastName,
-    password,
+    password: hashpassword,
   });
   AfterData.save();
   const token = getToken({ email: AfterData.email }, "1h");
@@ -92,14 +98,13 @@ _.post("/emailverification", (req, res) => {
 
 _.post("/login", async (req, res) => {
   let { email, password } = req.body;
-  const ExistingEmail = await UseSchema.find({ email });
+  const ExistingEmail = await UseSchema.findOne({ email });
   if (ExistingEmail.length == 0) {
     return res.json({
       error: `This ==> ${email} <== does't not Match`,
     });
   }
   res.json(ExistingEmail);
-  console.log("password is:", password);
 });
 
 module.exports = _;
