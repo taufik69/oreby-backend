@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const UseSchema = require("../../models/UserModel");
 const { getToken } = require("../../Jwt/jwt");
 const { Nodemailer } = require("../../utils/nodeMailer");
+const Marchant = require("../../models/Marchant");
 const saltRounds = 10;
 
 _.post("/registration", async (req, res) => {
@@ -125,6 +126,16 @@ _.post("/login", async (req, res) => {
       error: "password does not match Try agin !",
     });
   });
+});
+
+_.post("/becomeMarchant", async (req, res) => {
+  const { name, email, phoneNumber } = req.body;
+
+  const marchant = await new Marchant({
+    name,
+    email,
+    phoneNumber,
+  }).save();
 });
 
 module.exports = _;
