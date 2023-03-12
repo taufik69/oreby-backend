@@ -131,11 +131,38 @@ _.post("/login", async (req, res) => {
 _.post("/becomeMarchant", async (req, res) => {
   const { name, email, phoneNumber } = req.body;
 
-  const marchant = await new Marchant({
+  // let QueryData = await Marchant.find({ email });
+  // if (QueryData.length == 0) {
+  //   return res.status(400).json({
+  //     message: ` did't found that email ${QueryData.email} ! please try again`,
+  //   });
+  // }
+
+  await new Marchant({
     name,
     email,
     phoneNumber,
   }).save();
+  res.status(200).json({
+    message: "Please Wait for your admin approval",
+  });
+});
+
+_.post("/marchantStatus", async (req, res) => {
+  const { email, status } = req.body;
+  const findEmail = await Marchant.find({ email: email });
+  if (findEmail.length == 0) {
+    return res.status(404).json({
+      error: "Email does not find , please check Email Properly",
+    });
+  }
+
+  const updateStatus = await Marchant.findOneAndUpdate(
+    { email: email },
+    { status: status },
+    { new: true }
+  );
+  res.json(updateStatus);
 });
 
 module.exports = _;
