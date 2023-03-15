@@ -21,6 +21,11 @@ const BrandSchema = new Schema({
     ref: "Marchant",
     default: null,
   },
+  status: {
+    type: String,
+    enum: ["waiting", "rejected", "approved"],
+    default: "waiting",
+  },
   updated: {
     type: Date,
   },

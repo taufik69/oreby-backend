@@ -12,4 +12,21 @@ _.post("/createbrand", async (req, res) => {
   res.status(200).json(sendBrandData);
 });
 
+_.post("/brandstatus", async (req, res) => {
+  const { name, status } = req.body;
+  const getdata = await BrandSchema.find({ name: name });
+  if (getdata) {
+    return res.json({
+      error: "This brandName is already exist",
+    });
+  }
+
+  const findresult = await BrandSchema.findOneAndUpdate(
+    { name: name },
+    { status: status },
+    { new: true }
+  );
+  res.json(findresult);
+});
+
 module.exports = _;
