@@ -14,7 +14,7 @@ const Marchant = new Schema({
   },
   brandName: {
     type: Schema.Types.ObjectId,
-    ref: "Brand",
+    ref: "BrandSchema",
     default: null,
   },
   isActive: {
@@ -31,7 +31,7 @@ const Marchant = new Schema({
   },
   created: {
     type: Date,
-    default: Date.now,
+    default: Date.now(),
   },
 });
 

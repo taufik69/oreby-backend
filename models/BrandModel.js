@@ -16,12 +16,17 @@ const BrandSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  marchant: {
+    type: Schema.Types.ObjectId,
+    ref: "Marchant",
+    default: null,
+  },
   updated: {
     type: Date,
   },
   created: {
-    type: String,
-    default: Date.now,
+    type: Date,
+    default: Date.now(),
   },
 });
 

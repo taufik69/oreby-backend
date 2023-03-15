@@ -7,6 +7,7 @@ const UseSchema = require("../../models/UserModel");
 const { getToken } = require("../../Jwt/jwt");
 const { Nodemailer } = require("../../utils/nodeMailer");
 const Marchant = require("../../models/Marchant");
+
 const saltRounds = 10;
 
 _.post("/registration", async (req, res) => {
@@ -163,15 +164,6 @@ _.post("/marchantStatus", async (req, res) => {
     { new: true }
   );
   res.json(updateStatus);
-});
-
-// This route work for brand Schema
-_.post("/brand", (req, res) => {
-  const { name, description } = req.body;
-  res.status(200).json({
-    name,
-    description,
-  });
 });
 
 module.exports = _;
