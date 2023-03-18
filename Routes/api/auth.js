@@ -132,12 +132,12 @@ _.post("/login", async (req, res) => {
 _.post("/becomeMarchant", async (req, res) => {
   const { name, email, phoneNumber } = req.body;
 
-  // let QueryData = await Marchant.find({ email });
-  // if (QueryData.length == 0) {
-  //   return res.status(400).json({
-  //     message: ` did't found that email ${QueryData.email} ! please try again`,
-  //   });
-  // }
+  let QueryData = await Marchant.find({ email });
+  if (QueryData.length == 0) {
+    return res.status(400).json({
+      message: ` did't found that email ${QueryData.email} ! please try again`,
+    });
+  }
 
   await new Marchant({
     name,
