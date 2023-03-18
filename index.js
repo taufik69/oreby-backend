@@ -15,6 +15,7 @@ app.use(cors());
 DatabaseConnect();
 app.use(routes);
 
+
 app.listen(process.env.PORT || 8000, () => {
   console.log(chalk.blueBright(`Port running on ${process.env.PORT}`));
 });

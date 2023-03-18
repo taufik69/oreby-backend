@@ -1,6 +1,7 @@
 const express = require("express");
 const _ = express.Router();
 const BrandSchema = require("../../models/BrandModel.js");
+const CatagoriesSchema = require("../../models/CatagoryModel")
 
 _.post("/createbrand", async (req, res) => {
   const { name, marchant } = req.body;
@@ -14,12 +15,6 @@ _.post("/createbrand", async (req, res) => {
 
 _.post("/brandstatus", async (req, res) => {
   const { name, status } = req.body;
-  const getdata = await BrandSchema.find({ name: name });
-  if (getdata) {
-    return res.json({
-      error: "This brandName is already exist",
-    });
-  }
 
   const findresult = await BrandSchema.findOneAndUpdate(
     { name: name },
@@ -28,5 +23,6 @@ _.post("/brandstatus", async (req, res) => {
   );
   res.json(findresult);
 });
+
 
 module.exports = _;
