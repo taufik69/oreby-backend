@@ -1,7 +1,7 @@
 const express = require("express");
 const _ = express.Router();
 const BrandSchema = require("../../models/BrandModel.js");
-const CatagoriesSchema = require("../../models/CatagoryModel")
+
 
 _.post("/createbrand", async (req, res) => {
   const { name, marchant } = req.body;
