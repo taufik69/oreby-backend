@@ -5,11 +5,13 @@ const productSchma = new Schema({
   name: {
     type: String,
     required: true,
+    trim: true,
   },
   slug: {
     type: String,
-    required: true,
+    // required: true,
     unique: true,
+    trim: true,
   },
   image: {
     type: String,
@@ -18,6 +20,16 @@ const productSchma = new Schema({
   description: {
     type: String,
     required: true,
+  },
+  catagories: {
+    type: Schema.Types.ObjectId,
+    ref: "catagory",
+    default: null,
+  },
+  subCatagories: {
+    type: Schema.Types.ObjectId,
+    ref: "subCatagoris",
+    default: null,
   },
   price: {
     type: String,
@@ -31,7 +43,7 @@ const productSchma = new Schema({
     type: Number,
     default: null,
   },
-  commets: {
+  comments: {
     type: String,
     default: null,
   },

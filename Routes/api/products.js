@@ -4,11 +4,17 @@ const _ = express.Router();
 
 _.post("/createproduct", async (req, res) => {
   let condtion = false;
-  const { name, description, price } = req.body;
+  let { name, description, price } = req.body;
+
   do {
     let findName = await productModel.findOne({ name });
+
     if (findName) {
-      findData.name += (+new Date() * Math.random()).toString().substring(0, 2);
+      let charectar = "ABCEDEFGHIJKLMNOPWXYZabcdefghijklmnopwxyz";
+      name +=
+        " " +
+        charectar.charAt(Math.ceil(Math.random() * charectar.length)) +
+        (+new Date() * Math.random()).toString().substring(0, 2);
 
       condtion = true;
     } else {
@@ -16,8 +22,7 @@ _.post("/createproduct", async (req, res) => {
     }
   } while (condtion);
 
-  const slug = name.toLowerCase().split(" ").join("-");
-  res.json(slug);
+  let slug = name.trim().toLowerCase().split(" ").join("-");
 
   await new productModel({
     name,
@@ -25,8 +30,9 @@ _.post("/createproduct", async (req, res) => {
     description,
     price,
   }).save();
+
   res.status(200).json({
-    message: `sucessfully create product `,
+    message: `${name} sucessfully create product`,
   });
 });
 
