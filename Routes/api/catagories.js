@@ -3,24 +3,20 @@ const _ = express.Router();
 const CatagoriesSchema = require("../../models/CatagoryModel");
 
 _.post("/createcatagories", async (req, res) => {
-  try {
-    let { name } = req.body;
-    const showexistCatagories = CatagoriesSchema.findOne({ name });
+  const { name } = req.body;
+  let showexistCatagories = await CatagoriesSchema.findOne({ name });
 
-    if (showexistCatagories) {
-      return res
-        .status(404)
-        .json({ message: `This catagories ${name} are already exitst` });
-    }
-
-    const sendCatagoriesData = new CatagoriesSchema({
-      name,
-    });
-    sendCatagoriesData.save();
-    res.status(200).json(sendCatagoriesData);
-  } catch (error) {
-    res.status(404).json(error);
+  if (showexistCatagories) {
+    return res
+      .status(404)
+      .json({ message: `This catagories ${name} are already exitst` });
   }
+
+  const sendCatagoriesData = await new CatagoriesSchema({
+    name,
+  }).save();
+
+  res.status(200).json(sendCatagoriesData);
 });
 
 // this routes is work for catagories filed take name and update staus

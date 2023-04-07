@@ -4,7 +4,8 @@ const _ = express.Router();
 
 _.post("/createproduct", async (req, res) => {
   let condtion = false;
-  let { name, description, price } = req.body;
+  let { name, image, description, catagories, subCatagories, price, merchant } =
+    req.body;
 
   do {
     let findName = await productModel.findOne({ name });
@@ -27,8 +28,12 @@ _.post("/createproduct", async (req, res) => {
   await new productModel({
     name,
     slug,
+    image,
     description,
     price,
+    catagories,
+    subCatagories,
+    merchant,
   }).save();
 
   res.status(200).json({
